@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Core;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -43,24 +45,17 @@ abstract class AmazonRecommendationCore extends AmazonCore {
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         if (file_exists($this->config)){
             include($this->config);
         } else {
             throw new Exception('Config file does not exist!');
         }
 
-        if (isset($AMAZON_VERSION_RECOMMEND)){
-            $this->urlbranch = 'Recommendations/' . $AMAZON_VERSION_RECOMMEND;
-            $this->options['Version'] = $AMAZON_VERSION_RECOMMEND;
-        }
-
-        if(isset($THROTTLE_LIMIT_RECOMMEND)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_RECOMMEND;
-        }
-        if(isset($THROTTLE_TIME_RECOMMEND)) {
-            $this->throttleTime = $THROTTLE_TIME_RECOMMEND;
-        }
+        $this->urlbranch = 'Recommendations/' . AmazonEnviroment::AMAZON_VERSION_RECOMMEND;
+        $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_RECOMMEND;
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_RECOMMEND;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_RECOMMEND;
+        
 
         if (isset($store[$this->storeName]['marketplaceId'])){
             $this->setMarketplace($store[$this->storeName]['marketplaceId']);

@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Reports;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -49,14 +51,8 @@ class AmazonReportList extends \AmazonMws\Core\AmazonReportsCore implements \Ite
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null) {
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
-        
-        if(isset($THROTTLE_LIMIT_REPORTLIST)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_REPORTLIST;
-        }
-        if(isset($THROTTLE_TIME_REPORTLIST)) {
-            $this->throttleTime = $THROTTLE_TIME_REPORTLIST;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_REPORTLIST;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_REPORTLIST;
     }
     
     /**
@@ -288,15 +284,11 @@ class AmazonReportList extends \AmazonMws\Core\AmazonReportsCore implements \Ite
      * parameters will be removed.
      */
     protected function prepareToken(){
-        include($this->env);
         if ($this->tokenFlag && $this->tokenUseFlag){
             $this->options['Action'] = 'GetReportListByNextToken';
-            if(isset($THROTTLE_LIMIT_REPORTTOKEN)) {
-                $this->throttleLimit = $THROTTLE_LIMIT_REPORTTOKEN;
-            }
-            if(isset($THROTTLE_TIME_REPORTTOKEN)) {
-                $this->throttleTime = $THROTTLE_TIME_REPORTTOKEN;
-            }
+            $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_REPORTTOKEN;
+            $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_REPORTTOKEN;
+
             $this->throttleGroup = 'GetReportListByNextToken';
             $this->resetRequestIds();
             $this->resetReportTypes();
@@ -305,12 +297,8 @@ class AmazonReportList extends \AmazonMws\Core\AmazonReportsCore implements \Ite
             unset($this->options['Acknowledged']);
         } else {
             $this->options['Action'] = 'GetReportList';
-            if(isset($THROTTLE_LIMIT_REPORTLIST)) {
-                $this->throttleLimit = $THROTTLE_LIMIT_REPORTLIST;
-            }
-            if(isset($THROTTLE_TIME_REPORTLIST)) {
-                $this->throttleTime = $THROTTLE_TIME_REPORTLIST;
-            }
+            $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_REPORTLIST;
+            $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_REPORTLIST;
             $this->throttleGroup = 'GetReportList';
             unset($this->options['NextToken']);
             $this->reportList = array();
@@ -388,14 +376,10 @@ class AmazonReportList extends \AmazonMws\Core\AmazonReportsCore implements \Ite
      * request IDs, max count, and token.
      */
     protected function prepareCount(){
-        include($this->env);
         $this->options['Action'] = 'GetReportCount';
-        if(isset($THROTTLE_LIMIT_REPORTREQUESTLIST)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_REPORTREQUESTLIST;
-        }
-        if(isset($THROTTLE_TIME_REPORTREQUESTLIST)) {
-            $this->throttleTime = $THROTTLE_TIME_REPORTREQUESTLIST;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_REPORTREQUESTLIST;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_REPORTREQUESTLIST;
+
         $this->throttleGroup = 'GetReportCount';
         unset($this->options['NextToken']);
         unset($this->options['MaxCount']);

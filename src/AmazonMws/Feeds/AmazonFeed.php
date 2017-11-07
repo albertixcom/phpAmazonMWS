@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Feeds;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -47,16 +49,12 @@ class AmazonFeed extends \AmazonMws\Core\AmazonFeedsCore {
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         $this->options['Action'] = 'SubmitFeed';
         
-        if(isset($THROTTLE_LIMIT_FEEDSUBMIT)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_FEEDSUBMIT;
-        }
-        if(isset($THROTTLE_TIME_FEEDSUBMIT)) {
-            $this->throttleTime = $THROTTLE_TIME_FEEDSUBMIT;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_FEEDSUBMIT;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_FEEDSUBMIT;
+
         $this->throttleGroup = 'SubmitFeed';
     }
     
@@ -218,10 +216,7 @@ class AmazonFeed extends \AmazonMws\Core\AmazonFeedsCore {
         } else if ($s == 'false' || (!$s && is_bool($s))){
             $this->log("Purge mode deactivated.");
             $this->options['PurgeAndReplace'] = 'false';
-            include($this->env);
-            if(isset($THROTTLE_TIME_FEEDSUBMIT)) {
-                $this->throttleTime = $THROTTLE_TIME_FEEDSUBMIT;
-            }
+            $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_FEEDSUBMIT;
         } else {
             return false;
         }

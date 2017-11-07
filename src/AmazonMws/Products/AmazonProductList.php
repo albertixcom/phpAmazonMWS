@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Products;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -44,13 +46,10 @@ class AmazonProductList extends \AmazonMws\Core\AmazonProductsCore implements \I
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         $this->options['Action'] = 'GetMatchingProductForId';
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTLIST;
         
-        if(isset($THROTTLE_TIME_PRODUCTLIST)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTLIST;
-        }
         $this->throttleGroup = 'GetMatchingProductForId';
     }
     

@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Core;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -41,20 +43,11 @@ abstract class AmazonMerchantCore extends AmazonCore {
      * @param string $config [optional] <p>An alternate config file to set. Used for testing.</p>
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
-        parent::__construct($s, $mock, $m, $config);
-        include($this->env);
-
-        if(isset($AMAZON_VERSION_MERCHANT)){
-            $this->urlbranch = 'MerchantFulfillment/'.$AMAZON_VERSION_MERCHANT;
-            $this->options['Version'] = $AMAZON_VERSION_MERCHANT;
-        }
-
-        if(isset($THROTTLE_LIMIT_MERCHANT)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_MERCHANT;
-        }
-        if(isset($THROTTLE_TIME_MERCHANT)) {
-            $this->throttleTime = $THROTTLE_TIME_MERCHANT;
-        }
-        $this->throttleGroup = 'MerchantFulfillment';
+      parent::__construct($s, $mock, $m, $config);
+      $this->urlbranch = 'MerchantFulfillment/'.AmazonEnviroment::AMAZON_VERSION_MERCHANT;
+      $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_MERCHANT;
+      $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_MERCHANT;
+      $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_MERCHANT;
+      $this->throttleGroup = 'MerchantFulfillment';
     }
 }

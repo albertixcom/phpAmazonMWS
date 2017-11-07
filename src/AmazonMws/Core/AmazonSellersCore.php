@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Core;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -42,11 +44,7 @@ abstract class AmazonSellersCore extends AmazonCore {
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
-        
-        if(isset($AMAZON_VERSION_SELLERS)){
-            $this->urlbranch = 'Sellers/'.$AMAZON_VERSION_SELLERS;
-            $this->options['Version'] = $AMAZON_VERSION_SELLERS;
-        }
+        $this->urlbranch = 'Sellers/'.AmazonEnviroment::AMAZON_VERSION_SELLERS;
+        $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_SELLERS;
     }
 }

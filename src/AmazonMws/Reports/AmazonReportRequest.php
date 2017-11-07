@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Reports;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -44,16 +46,12 @@ class AmazonReportRequest extends \AmazonMws\Core\AmazonReportsCore {
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null) {
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         $this->options['Action'] = 'RequestReport';
         
-        if(isset($THROTTLE_LIMIT_REPORTREQUEST)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_REPORTREQUEST;
-        }
-        if(isset($THROTTLE_TIME_REPORTREQUEST)) {
-            $this->throttleTime = $THROTTLE_TIME_REPORTREQUEST;
-        }
+            $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_REPORTREQUEST;
+            $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_REPORTREQUEST;
+        
         $this->throttleGroup = 'RequestReport';
     }
     

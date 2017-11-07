@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Orders;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -49,15 +51,10 @@ class AmazonOrderList extends \AmazonMws\Core\AmazonOrderCore implements \Iterat
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         $this->resetMarketplaceFilter();
         
-        if(isset($THROTTLE_LIMIT_ORDERLIST)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_ORDERLIST;
-        }
-        if(isset($THROTTLE_TIME_ORDERLIST)) {
-            $this->throttleTime = $THROTTLE_TIME_ORDERLIST;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_ORDERLIST;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_ORDERLIST;
         $this->throttleGroup = 'ListOrders';
     }
     

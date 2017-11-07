@@ -1,6 +1,7 @@
 <?php
 
 namespace AmazonMws\Core;
+use AmazonMws\Config\AmazonEnviroment;
 
 /**
  * Copyright 2013 CPI Group, LLC
@@ -41,21 +42,13 @@ abstract class AmazonInboundCore extends AmazonCore {
      * @param string $config [optional] <p>An alternate config file to set. Used for testing.</p>
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
-        parent::__construct($s, $mock, $m, $config);
-        include($this->env);
-        
-        if(isset($AMAZON_VERSION_INBOUND)){
-            $this->urlbranch = 'FulfillmentInboundShipment/'.$AMAZON_VERSION_INBOUND;
-            $this->options['Version'] = $AMAZON_VERSION_INBOUND;
-        }
-        
-        
-        if(isset($THROTTLE_LIMIT_INVENTORY)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_INVENTORY;
-        }
-        if(isset($THROTTLE_TIME_INVENTORY)) {
-            $this->throttleTime = $THROTTLE_TIME_INVENTORY;
-        }
-        $this->throttleGroup = 'Inventory';
+      parent::__construct($s, $mock, $m, $config);
+
+      $this->urlbranch = 'FulfillmentInboundShipment/'.AmazonEnviroment::AMAZON_VERSION_INBOUND;
+      $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_INBOUND;
+      $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_INVENTORY;
+      $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_INVENTORY;
+
+      $this->throttleGroup = 'Inventory';
     }
 }

@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Products;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -48,7 +50,6 @@ class AmazonProductSearch extends \AmazonMws\Core\AmazonProductsCore {
      */
     public function __construct($s = null, $q = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         if($q){
             $this->setQuery($q);
@@ -56,9 +57,7 @@ class AmazonProductSearch extends \AmazonMws\Core\AmazonProductsCore {
         
         $this->options['Action'] = 'ListMatchingProducts';
         
-        if(isset($THROTTLE_TIME_PRODUCTMATCH)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTMATCH;
-        }
+            $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTMATCH;
         $this->throttleGroup = 'ListMatchingProducts';
     }
     

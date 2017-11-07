@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Orders;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -51,19 +53,15 @@ class AmazonOrderSet extends \AmazonMws\Core\AmazonOrderCore implements \Iterato
     public function __construct($s = null, $o = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
         $this->i = 0;
-        include($this->env);
         
         if($o){
             $this->setOrderIds($o);
         }
         
         $this->options['Action'] = 'GetOrder';
-        if(isset($THROTTLE_LIMIT_ORDER)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_ORDER;
-        }
-        if(isset($THROTTLE_TIME_ORDER)) {
-            $this->throttleTime = $THROTTLE_TIME_ORDER;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_ORDER;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_ORDER;
+
         $this->throttleGroup = 'GetOrder';
     }
     

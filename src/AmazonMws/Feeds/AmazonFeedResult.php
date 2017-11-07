@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Feeds;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -48,7 +50,6 @@ class AmazonFeedResult extends \AmazonMws\Core\AmazonFeedsCore {
      */
     public function __construct($s = null, $id = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         if($id){
             $this->options['FeedSubmissionId'] = $id;
@@ -56,12 +57,9 @@ class AmazonFeedResult extends \AmazonMws\Core\AmazonFeedsCore {
         
         $this->options['Action'] = 'GetFeedSubmissionResult';
         
-        if(isset($THROTTLE_LIMIT_FEEDRESULT)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_FEEDRESULT;
-        }
-        if(isset($THROTTLE_TIME_FEEDRESULT)) {
-            $this->throttleTime = $THROTTLE_TIME_FEEDRESULT;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_FEEDRESULT;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_FEEDRESULT;
+        
         $this->throttleGroup = 'GetFeedSubmissionResult';
     }
     

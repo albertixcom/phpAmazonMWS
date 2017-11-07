@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Products;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013-2017 CPI Group, LLC
  *
@@ -44,13 +46,10 @@ class AmazonProductFeeEstimate extends \AmazonMws\Core\AmazonProductsCore implem
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
-
+        
         $this->options['Action'] = 'GetMyFeesEstimate';
 
-        if(isset($THROTTLE_TIME_PRODUCTFEE)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTFEE;
-        }
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTFEE;
         $this->throttleGroup = 'GetMyFeesEstimate';
     }
 

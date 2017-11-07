@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Orders;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -52,19 +54,14 @@ class AmazonOrderItemList extends \AmazonMws\Core\AmazonOrderCore implements \It
      */
     public function __construct($s = null, $id=null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         
         if (!is_null($id)){
             $this->setOrderId($id);
         }
-        
-        if(isset($THROTTLE_LIMIT_ITEM)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_ITEM;
-        }
-        if(isset($THROTTLE_TIME_ITEM)) {
-            $this->throttleTime = $THROTTLE_TIME_ITEM;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_ITEM;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_ITEM;
+
         $this->throttleGroup = 'ListOrderItems';
     }
     

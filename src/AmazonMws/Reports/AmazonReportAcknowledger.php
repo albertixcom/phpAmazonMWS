@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Reports;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -50,7 +52,6 @@ class AmazonReportAcknowledger extends \AmazonMws\Core\AmazonReportsCore impleme
      */
     public function __construct($s = null, $id = null, $mock = false, $m = null, $config = null) {
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         if ($id){
             $this->setReportIds($id);
@@ -58,12 +59,8 @@ class AmazonReportAcknowledger extends \AmazonMws\Core\AmazonReportsCore impleme
         
         $this->options['Action'] = 'UpdateReportAcknowledgements';
         
-        if(isset($THROTTLE_LIMIT_REPORTSCHEDULE)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_REPORTSCHEDULE;
-        }
-        if(isset($THROTTLE_TIME_REPORTSCHEDULE)) {
-            $this->throttleTime = $THROTTLE_TIME_REPORTSCHEDULE;
-        }
+            $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_REPORTSCHEDULE;
+            $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_REPORTSCHEDULE;
         $this->throttleGroup = 'UpdateReportAcknowledgements';
     }
     

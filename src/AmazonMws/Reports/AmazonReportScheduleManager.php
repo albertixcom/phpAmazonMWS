@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Reports;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -49,16 +51,12 @@ class AmazonReportScheduleManager extends \AmazonMws\Core\AmazonReportsCore impl
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null) {
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         $this->options['Action'] = 'ManageReportSchedule';
         
-        if(isset($THROTTLE_LIMIT_REPORTSCHEDULE)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_REPORTSCHEDULE;
-        }
-        if(isset($THROTTLE_TIME_REPORTSCHEDULE)) {
-            $this->throttleTime = $THROTTLE_TIME_REPORTSCHEDULE;
-        }
+            $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_REPORTSCHEDULE;
+            $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_REPORTSCHEDULE;
+        
     }
     
     /**

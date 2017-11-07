@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Core;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -41,13 +43,9 @@ abstract class AmazonFeedsCore extends AmazonCore {
      * @param string $config [optional] <p>An alternate config file to set. Used for testing.</p>
      */
     public function __construct($s = null, $mock = false, $m = null, $config = null){
-        parent::__construct($s, $mock, $m, $config);
-        include($this->env);
-        
-        $this->urlbranch = '';
-        if(isset($AMAZON_VERSION_FEEDS)) {
-            $this->options['Version'] = $AMAZON_VERSION_FEEDS;
-        }
+      parent::__construct($s, $mock, $m, $config);
+      $this->urlbranch = '';
+      $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_FEEDS;
     }
 }
 

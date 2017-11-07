@@ -2,6 +2,8 @@
 
 namespace AmazonMws\Products;
 
+use AmazonMws\Config\AmazonEnviroment;
+
 /**
  * Copyright 2013 CPI Group, LLC
  *
@@ -213,10 +215,7 @@ class AmazonProductInfo extends \AmazonMws\Core\AmazonProductsCore {
      * ItemCondition and ExcludeMe.
      */
     protected function prepareCompetitive(){
-        include($this->env);
-        if(isset($THROTTLE_TIME_PRODUCTPRICE)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTPRICE;
-        }
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTPRICE;
         $this->throttleGroup = 'GetCompetitivePricing';
         unset($this->options['ExcludeMe']);
         unset($this->options['ItemCondition']);
@@ -272,10 +271,7 @@ class AmazonProductInfo extends \AmazonMws\Core\AmazonProductsCore {
      * This changes key options for using <i>fetchLowestOffer</i>.
      */
     protected function prepareLowest(){
-        include($this->env);
-        if(isset($THROTTLE_TIME_PRODUCTPRICE)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTPRICE;
-        }
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTPRICE;
         $this->throttleGroup = 'GetLowestOfferListings';
         if (array_key_exists('SellerSKUList.SellerSKU.1',$this->options)){
             $this->options['Action'] = 'GetLowestOfferListingsForSKU';
@@ -327,10 +323,7 @@ class AmazonProductInfo extends \AmazonMws\Core\AmazonProductsCore {
      * This changes key options for using <i>fetchLowestPricedOffers</i>.
      */
     protected function prepareLowestPriced(){
-        include($this->env);
-        if(isset($THROTTLE_TIME_PRODUCTPRICE)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTPRICE;
-        }
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTPRICE;
         $this->throttleGroup = 'GetLowestPricedOfferListings';
         if (array_key_exists('SellerSKUList.SellerSKU.1',$this->options)){
             $this->options['Action'] = 'GetLowestPricedOffersForSKU';
@@ -388,10 +381,7 @@ class AmazonProductInfo extends \AmazonMws\Core\AmazonProductsCore {
      * the ExcludeMe parameter will be removed.
      */
     protected function prepareMyPrice(){
-        include($this->env);
-        if(isset($THROTTLE_TIME_PRODUCTPRICE)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTPRICE;
-        }
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTPRICE;
         $this->throttleGroup = 'GetMyPrice';
         unset($this->options['ExcludeMe']);
         if (array_key_exists('SellerSKUList.SellerSKU.1',$this->options)){
@@ -448,10 +438,7 @@ class AmazonProductInfo extends \AmazonMws\Core\AmazonProductsCore {
      * ItemCondition and ExcludeMe.
      */
     protected function prepareCategories(){
-        include($this->env);
-        if(isset($THROTTLE_TIME_PRODUCTLIST)) {
-            $this->throttleTime = $THROTTLE_TIME_PRODUCTLIST;
-        }
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_PRODUCTLIST;
         $this->throttleGroup = 'GetProductCategories';
         unset($this->options['ExcludeMe']);
         unset($this->options['ItemCondition']);

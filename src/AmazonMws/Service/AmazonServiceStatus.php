@@ -1,6 +1,7 @@
 <?php
 
 namespace AmazonMws\Service;
+use AmazonMws\Config\AmazonEnviroment;
 
 /**
  * Copyright 2013 CPI Group, LLC
@@ -50,20 +51,14 @@ class AmazonServiceStatus extends \AmazonMws\Core\AmazonCore {
      */
     public function __construct($s = null, $service = null, $mock = false, $m = null, $config = null){
         parent::__construct($s, $mock, $m, $config);
-        include($this->env);
         
         if ($service){
             $this->setService($service);
         }
         
         $this->options['Action'] = 'GetServiceStatus';
-        
-        if(isset($THROTTLE_LIMIT_STATUS)) {
-            $this->throttleLimit = $THROTTLE_LIMIT_STATUS;
-        }
-        if(isset($THROTTLE_TIME_STATUS)) {
-            $this->throttleTime = $THROTTLE_TIME_STATUS;
-        }
+        $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_STATUS;
+        $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_STATUS;
         $this->throttleGroup = 'GetServiceStatus';
     }
     
@@ -85,12 +80,6 @@ class AmazonServiceStatus extends \AmazonMws\Core\AmazonCore {
      * @return boolean <b>TRUE</b> if valid input, <b>FALSE</b> if improper input
      */
     public function setService($s){
-        if (file_exists($this->env)){
-            include($this->env);
-        } else {
-            return false;
-        }
-        
         if (is_null($s)){
             $this->log("Service cannot be null",'Warning');
             return false;
@@ -103,46 +92,34 @@ class AmazonServiceStatus extends \AmazonMws\Core\AmazonCore {
         
         switch($s){
             case 'Inbound':
-                if(isset($AMAZON_VERSION_INBOUND)){
-                    $this->urlbranch = 'FulfillmentInboundShipment/'.$AMAZON_VERSION_INBOUND;
-                    $this->options['Version'] = $AMAZON_VERSION_INBOUND;
-                    $this->ready = true;
-                }
+                $this->urlbranch = 'FulfillmentInboundShipment/'.AmazonEnviroment::AMAZON_VERSION_INBOUND;
+                $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_INBOUND;
+                $this->ready = true;
                 return true;
             case 'Inventory':
-                if(isset($AMAZON_VERSION_INVENTORY)){
-                    $this->urlbranch = 'FulfillmentInventory/'.$AMAZON_VERSION_INVENTORY;
-                    $this->options['Version'] = $AMAZON_VERSION_INVENTORY;
-                    $this->ready = true;
-                }
+                $this->urlbranch = 'FulfillmentInventory/'.AmazonEnviroment::AMAZON_VERSION_INVENTORY;
+                $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_INVENTORY;
+                $this->ready = true;
                 return true;
             case 'Orders':
-                if(isset($AMAZON_VERSION_ORDERS)){
-                    $this->urlbranch = 'Orders/'.$AMAZON_VERSION_ORDERS;
-                    $this->options['Version'] = $AMAZON_VERSION_ORDERS;
-                    $this->ready = true;
-                }
+                $this->urlbranch = 'Orders/'.AmazonEnviroment::AMAZON_VERSION_ORDERS;
+                $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_ORDERS;
+                $this->ready = true;
                 return true;
             case 'Outbound':
-                if(isset($AMAZON_VERSION_OUTBOUND)){
-                    $this->urlbranch = 'FulfillmentOutboundShipment/'.$AMAZON_VERSION_OUTBOUND;
-                    $this->options['Version'] = $AMAZON_VERSION_OUTBOUND;
-                    $this->ready = true;
-                }
+                $this->urlbranch = 'FulfillmentOutboundShipment/'.AmazonEnviroment::AMAZON_VERSION_OUTBOUND;
+                $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_OUTBOUND;
+                $this->ready = true;
                 return true;
             case 'Products':
-                if(isset($AMAZON_VERSION_PRODUCTS)){
-                    $this->urlbranch = 'Products/'.$AMAZON_VERSION_PRODUCTS;
-                    $this->options['Version'] = $AMAZON_VERSION_PRODUCTS;
-                    $this->ready = true;
-                }
+                $this->urlbranch = 'Products/'.AmazonEnviroment::AMAZON_VERSION_PRODUCTS;
+                $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_PRODUCTS;
+                $this->ready = true;
                 return true;
             case 'Sellers':
-                if(isset($AMAZON_VERSION_SELLERS)){
-                    $this->urlbranch = 'Sellers/'.$AMAZON_VERSION_SELLERS;
-                    $this->options['Version'] = $AMAZON_VERSION_SELLERS;
-                    $this->ready = true;
-                }
+                $this->urlbranch = 'Sellers/'.AmazonEnviroment::AMAZON_VERSION_SELLERS;
+                $this->options['Version'] = AmazonEnviroment::AMAZON_VERSION_SELLERS;
+                $this->ready = true;
                 return true;
             default:
                 $this->log("$s is not a valid service",'Warning');

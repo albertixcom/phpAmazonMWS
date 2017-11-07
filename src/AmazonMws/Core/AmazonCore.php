@@ -108,7 +108,6 @@ abstract class AmazonCore {
     protected $mockFiles;
     protected $mockIndex = 0;
     protected $logpath;
-    protected $env;
     protected $rawResponses = array();
     protected $disableSslVerify = false;
 
@@ -138,7 +137,6 @@ abstract class AmazonCore {
         $this->setStore($s);
         $this->setMock($mock,$m);
         
-        $this->env=__DIR__.'/../../environment.php';
         $this->options['SignatureVersion'] = 2;
         $this->options['SignatureMethod'] = 'HmacSHA256';
     }
