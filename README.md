@@ -5,7 +5,11 @@ This library is based on original https://github.com/CPIGroup/phpAmazonMWS libra
 
 Main changes is focused to dinamicaly pass configuration and using more modern variables managment (php >=7.0)
 
-This library is still in development, not all classes are rewrited to use common configurations.
+---------------------------------------
+
+##### This library is still in development, not all classes are rewrited to use common configurations.
+
+---------------------------------------
 
 A library to connect to Amazon's Merchant Web Services (MWS) in an object-oriented manner, with a focus on intuitive usage.  
 
