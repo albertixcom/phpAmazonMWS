@@ -66,4 +66,15 @@ public function getOrders() {
     }
   }
 ```
+## NOTES
 
+Original classes are dated some years ago and used php 5.4 as minimal version. In new enviroment all variables should be explicit to better flow and debugging. I've removed all mocks, because have a plan to use new phpunit.
+
+<i>Sorry for my horrible english ... ;)</i>
+
+## TODO
+- rewrite all classes to use "common config"
+- include excel classes to generate flat files
+- revise all nullable variables
+- use new phpunit
+- implement roubust logger
