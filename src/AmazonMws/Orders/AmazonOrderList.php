@@ -42,15 +42,11 @@ class AmazonOrderList extends \AmazonMws\Core\AmazonOrderCore implements \Iterat
      * The parameters are passed to the parent constructor, which are
      * in turn passed to the AmazonCore constructor. See it for more information
      * on these parameters and common methods.
-     * @param string $s [optional] <p>Name for the store you want to use.
-     * This parameter is optional if only one store is defined in the config file.</p>
-     * @param boolean $mock [optional] <p>This is a flag for enabling Mock Mode.
-     * This defaults to <b>FALSE</b>.</p>
-     * @param array|string $m [optional] <p>The files (or file) to use in Mock Mode.</p>
-     * @param string $config [optional] <p>An alternate config file to set. Used for testing.</p>
+     * 
+     * @param \AmazonMws\Config\AmazonStore $store
      */
-    public function __construct($s = null, $mock = false, $m = null, $config = null){
-        parent::__construct($s, $mock, $m, $config);
+    public function __construct(\AmazonMws\Config\AmazonStore $store){
+        parent::__construct($store);
         $this->resetMarketplaceFilter();
         
         $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_ORDERLIST;
@@ -217,18 +213,7 @@ class AmazonOrderList extends \AmazonMws\Core\AmazonOrderCore implements \Iterat
                 unset($this->options[$op]);
             }
         }
-
-        //reset to store's default marketplace
-        if (file_exists($this->config)){
-            include($this->config);
-        } else {
-            throw new Exception('Config file does not exist!');
-        }
-        if(isset($store[$this->storeName]) && array_key_exists('marketplaceId', $store[$this->storeName])){
-            $this->options['MarketplaceId.Id.1'] = $store[$this->storeName]['marketplaceId'];
-        } else {
-            $this->log("Marketplace ID is missing",'Urgent');
-        }
+        $this->options['MarketplaceId.Id.1'] = $this->getStore()->getMarketplaceId();
     }
     
     /**
@@ -420,17 +405,13 @@ class AmazonOrderList extends \AmazonMws\Core\AmazonOrderCore implements \Iterat
         $query = $this->genQuery();
         
         $path = $this->options['Action'].'Result';
-        if ($this->mockMode){
-           $xml = $this->fetchMockFile()->$path;
-        } else {
-            $response = $this->sendRequest($url, array('Post'=>$query));
-            
-            if (!$this->checkResponse($response)){
-                return false;
-            }
-            
-            $xml = simplexml_load_string($response['body'])->$path;
+        $response = $this->sendRequest($url, array('Post'=>$query));
+
+        if (!$this->checkResponse($response)){
+            return false;
         }
+
+        $xml = simplexml_load_string($response['body'])->$path;
         
         $this->parseXML($xml);
         
@@ -486,20 +467,18 @@ class AmazonOrderList extends \AmazonMws\Core\AmazonOrderCore implements \Iterat
      * @return boolean <b>FALSE</b> if no XML data is found
      */
     protected function parseXML($xml){
-        if (!$xml){
-            return false;
+      if (!$xml){
+        return false;
+      }
+
+      foreach($xml->Orders->children() as $key => $data){
+        if ($key != 'Order'){
+          break;
         }
-        
-        foreach($xml->Orders->children() as $key => $data){
-            if ($key != 'Order'){
-                break;
-            }
-            $this->orderList[$this->index] = new AmazonOrder($this->storeName,null,$data,$this->mockMode,$this->mockFiles,$this->config);
-            $this->orderList[$this->index]->setLogPath($this->logpath);
-            $this->orderList[$this->index]->mockIndex = $this->mockIndex;
-            $this->index++;
-        }
-        
+        $this->orderList[$this->index] = new AmazonOrder($this->getStore(), null, $data);
+        $this->orderList[$this->index]->setLogPath($this->logpath);
+        $this->index++;
+      }
     }
     
     /**
@@ -532,15 +511,15 @@ class AmazonOrderList extends \AmazonMws\Core\AmazonOrderCore implements \Iterat
     
     /**
      * Returns the list of orders.
-     * @return array|boolean array of <i>AmazonOrder</i> objects, or <b>FALSE</b> if list not filled yet
+     * 
+     * @return \AmazonMws\Orders\AmazonOrder[]
      */
     public function getList(){
-        if (isset($this->orderList)){
-            return $this->orderList;
-        } else {
-            return false;
-        }
-        
+      if (isset($this->orderList)){
+        return $this->orderList;
+      } else {
+        return false;
+      }
     }
     
     /**

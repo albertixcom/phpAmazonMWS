@@ -52,12 +52,11 @@ class AmazonOrderItemList extends \AmazonMws\Core\AmazonOrderCore implements \It
      * @param array|string $m [optional] <p>The files (or file) to use in Mock Mode.</p>
      * @param string $config [optional] <p>An alternate config file to set. Used for testing.</p>
      */
-    public function __construct($s = null, $id=null, $mock = false, $m = null, $config = null){
-        parent::__construct($s, $mock, $m, $config);
+    public function __construct(\AmazonMws\Config\AmazonStore $store, string $id = null){
+        parent::__construct($store);
         
-        
-        if (!is_null($id)){
-            $this->setOrderId($id);
+        if ($id !== null){
+          $this->setOrderId($id);
         }
         $this->throttleLimit = AmazonEnviroment::THROTTLE_LIMIT_ITEM;
         $this->throttleTime = AmazonEnviroment::THROTTLE_TIME_ITEM;
@@ -126,17 +125,15 @@ class AmazonOrderItemList extends \AmazonMws\Core\AmazonOrderCore implements \It
         $query = $this->genQuery();
         
         $path = $this->options['Action'].'Result';
-        if ($this->mockMode){
-           $xml = $this->fetchMockFile()->$path;
-        } else {
-            $response = $this->sendRequest($url, array('Post'=>$query));
-            
-            if (!$this->checkResponse($response)){
-                return false;
-            }
-            
-            $xml = simplexml_load_string($response['body'])->$path;
+        
+        $response = $this->sendRequest($url, array('Post'=>$query));
+
+        if (!$this->checkResponse($response)){
+            return false;
         }
+
+        $xml = simplexml_load_string($response['body'])->$path;
+        
         
         if (is_null($xml->AmazonOrderId)){
             $this->log("You just got throttled.",'Warning');

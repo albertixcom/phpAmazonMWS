@@ -162,15 +162,15 @@ abstract class AmazonCore {
      * @throws Exception If the file cannot be found or read.
      */
     public function setLogPath($path){
-      if (!file_exists($path)){
-        touch($path);
-      }
-
-      if (file_exists($path) && is_readable($path)){
-        $this->logpath = $path;
-      } else {
-        throw new Exception("Log file does not exist or cannot be read! ($path)");
-      }
+//      if (!file_exists($path)){
+//        touch($path);
+//      }
+//
+//      if (file_exists($path) && is_readable($path)){
+//        $this->logpath = $path;
+//      } else {
+//        throw new Exception("Log file does not exist or cannot be read! ($path)");
+//      }
     }
     
     /**
@@ -181,7 +181,7 @@ abstract class AmazonCore {
     public function setStore(\AmazonMws\Config\AmazonStore $store){
       $serviceURL = $store->getServiceUrl();
       if ($serviceURL == null || empty($serviceURL)) {
-        throw new Exception("\$serviceURL MISSED");
+        throw new \Exception("\$serviceURL MISSED");
       }
       $this->urlbase = rtrim($serviceURL, '/') . '/';
         
@@ -191,6 +191,14 @@ abstract class AmazonCore {
       $this->options['MWSAuthToken'] = $store->getSellerDevAuthToken();
       
       $this->store = $store;
+    }
+    
+    /**
+     * 
+     * @return \AmazonMws\Config\AmazonStore $store
+     */
+    public function getStore() {
+      return $this->store;
     }
     
     /**
@@ -218,62 +226,59 @@ abstract class AmazonCore {
      * @throws Exception If the file can't be written to.
      */
     protected function log($msg, $level = 'Info'){
-        if ($msg != false) {
-            $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-            
-            if (isset($logfunction) && $logfunction != '' && function_exists($logfunction)){
-                switch ($level){
-                   case('Info'): $loglevel = LOG_INFO; break; 
-                   case('Throttle'): $loglevel = LOG_INFO; break; 
-                   case('Warning'): $loglevel = LOG_NOTICE; break; 
-                   case('Urgent'): $loglevel = LOG_ERR; break; 
-                   default: $loglevel = LOG_INFO;
-                }
-                call_user_func($logfunction,$msg,$loglevel);
-            }
-            
-            if (isset($muteLog) && $muteLog == true){
-                return;
-            }
-            
-            if(isset($userName) && $userName != ''){ 
-                    $name = $userName;
-            }else{
-                    $name = 'guest';
-            }
-            
-            if(isset($backtrace) && isset($backtrace[1]) && isset($backtrace[1]['file']) && isset($backtrace[1]['line']) && isset($backtrace[1]['function'])){
-                    $fileName = basename($backtrace[1]['file']);
-                    $file = $backtrace[1]['file'];
-                    $line = $backtrace[1]['line'];
-                    $function = $backtrace[1]['function'];
-            }else{
-                    $fileName = basename($backtrace[0]['file']);
-                    $file = $backtrace[0]['file'];
-                    $line = $backtrace[0]['line'];
-                    $function = $backtrace[0]['function'];
-            }
-            if(isset($_SERVER['REMOTE_ADDR'])){
-                    $ip = $_SERVER['REMOTE_ADDR'];
-                    if($ip == '127.0.0.1')$ip = 'local';//save some char
-            }else{
-                    $ip = 'cli';
-            }
-            if (!file_exists($this->logpath)) {
-                //attempt to create the file if it does not exist
-                file_put_contents($this->logpath, "This is the Amazon log, for Amazon classes to use.\n");
-            }
-            if (file_exists($this->logpath) && is_writable($this->logpath)){
-                $str = "[$level][" . date("Y/m/d H:i:s") . " $name@$ip $fileName:$line $function] " . $msg;
-                $fd = fopen($this->logpath, "a+");
-                fwrite($fd,$str . "\r\n");
-                fclose($fd);
-            } else {
-                throw new Exception('Error! Cannot write to log! ('.$this->logpath.')');
-            }
-        } else {
-            return false;
-        }
+//      if ($msg != false) {
+//        $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+//            
+//        if (isset($logfunction) && $logfunction != '' && function_exists($logfunction)){
+//            switch ($level){
+//               case('Info'): $loglevel = LOG_INFO; break; 
+//               case('Throttle'): $loglevel = LOG_INFO; break; 
+//               case('Warning'): $loglevel = LOG_NOTICE; break; 
+//               case('Urgent'): $loglevel = LOG_ERR; break; 
+//               default: $loglevel = LOG_INFO;
+//            }
+//            call_user_func($logfunction,$msg,$loglevel);
+//        }
+//            
+//            
+//            if(isset($userName) && $userName != ''){ 
+//                    $name = $userName;
+//            }else{
+//                    $name = 'guest';
+//            }
+//            
+//            if(isset($backtrace) && isset($backtrace[1]) && isset($backtrace[1]['file']) && isset($backtrace[1]['line']) && isset($backtrace[1]['function'])){
+//                    $fileName = basename($backtrace[1]['file']);
+//                    $file = $backtrace[1]['file'];
+//                    $line = $backtrace[1]['line'];
+//                    $function = $backtrace[1]['function'];
+//            }else{
+//                    $fileName = basename($backtrace[0]['file']);
+//                    $file = $backtrace[0]['file'];
+//                    $line = $backtrace[0]['line'];
+//                    $function = $backtrace[0]['function'];
+//            }
+//            if(isset($_SERVER['REMOTE_ADDR'])){
+//                    $ip = $_SERVER['REMOTE_ADDR'];
+//                    if($ip == '127.0.0.1')$ip = 'local';//save some char
+//            }else{
+//                    $ip = 'cli';
+//            }
+//            if (!file_exists($this->logpath)) {
+//                //attempt to create the file if it does not exist
+//                file_put_contents($this->logpath, "This is the Amazon log, for Amazon classes to use.\n");
+//            }
+//            if (file_exists($this->logpath) && is_writable($this->logpath)){
+//                $str = "[$level][" . date("Y/m/d H:i:s") . " $name@$ip $fileName:$line $function] " . $msg;
+//                $fd = fopen($this->logpath, "a+");
+//                fwrite($fd,$str . "\r\n");
+//                fclose($fd);
+//            } else {
+//                throw new Exception('Error! Cannot write to log! ('.$this->logpath.')');
+//            }
+//        } else {
+//            return false;
+//        }
     }
     
     /**

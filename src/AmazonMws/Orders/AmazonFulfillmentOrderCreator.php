@@ -29,18 +29,18 @@ namespace AmazonMws\Orders;
  */
 class AmazonFulfillmentOrderCreator extends \AmazonMws\Core\AmazonOutboundCore {
     
-    /**
-     * Sets the marketplace associated with the fulfillment order. (Optional)
-     * @param string $m <p>Marketplace ID</p>
-     * @return boolean <b>FALSE</b> if improper input
-     */
-    public function setMarketplace($m){
-        if (is_string($m)){
-            $this->options['MarketplaceId'] = $m;
-        } else {
-            return false;
-        }
+  /**
+   * Sets the marketplace associated with the fulfillment order. (Optional)
+   * @param string $m <p>Marketplace ID</p>
+   * @return boolean <b>FALSE</b> if improper input
+   */
+  public function setMarketplace($m){
+    if (is_string($m)){
+        $this->options['MarketplaceId'] = $m;
+    } else {
+        return false;
     }
+  }
     
     /**
      * Sets the fulfillment order ID. (Required)

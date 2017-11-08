@@ -28,47 +28,39 @@ namespace AmazonMws\Orders;
  * using the <i>AmazonFulfillmentPreview</i> object.
  */
 class AmazonFulfillmentOrder extends \AmazonMws\Core\AmazonOutboundCore {
-    protected $order;
-    
-    /**
-     * AmazonFulfillmentOrder fetches a fulfillment order from Amazon. You need a Fulfillment Order ID.
-     * 
-     * The parameters are passed to the parent constructor, which are
-     * in turn passed to the AmazonCore constructor. See it for more information
-     * on these parameters and common methods.
-     * Please note that an extra parameter comes before the usual Mock Mode parameters,
-     * so be careful when setting up the object.
-     * @param string $s [optional] <p>Name for the store you want to use.
-     * This parameter is optional if only one store is defined in the config file.</p>
-     * @param string $id [optional] <p>The Fulfillment Order ID to set for the object.</p>
-     * @param boolean $mock [optional] <p>This is a flag for enabling Mock Mode.
-     * This defaults to <b>FALSE</b>.</p>
-     * @param array|string $m [optional] <p>The files (or file) to use in Mock Mode.</p>
-     * @param string $config [optional] <p>An alternate config file to set. Used for testing.</p>
-     */
-    public function __construct($s = null, $id = null, $mock = false, $m = null, $config = null) {
-        parent::__construct($s, $mock, $m, $config);
-        
-        if($id){
-            $this->setOrderId($id);
-        }
+  protected $order;
+
+  /**
+   * AmazonFulfillmentOrder fetches a fulfillment order from Amazon. You need a Fulfillment Order ID.
+   * 
+   * The parameters are passed to the parent constructor, which are
+   * in turn passed to the AmazonCore constructor. See it for more information
+   * on these parameters and common methods.
+   * Please note that an extra parameter comes before the usual Mock Mode parameters,
+   * so be careful when setting up the object.
+   *
+   * @param \AmazonMws\Config\AmazonStore $store
+   * @param string $id [optional] <p>The Fulfillment Order ID to set for the object.</p>
+   */
+  public function __construct(\AmazonMws\Config\AmazonStore $store, string $id = null) {
+    parent::__construct($store);
+
+    if( $id !== null ) {
+      $this->setOrderId($id);
     }
+  }
     
-    /**
-     * Sets the fulfillment order ID. (Required)
-     * 
-     * This method sets the Fulfillment Order ID to be sent in the next request.
-     * This parameter is required for fetching the fulfillment order from Amazon.
-     * @param string $s <p>Maximum 40 characters.</p>
-     * @return boolean <b>FALSE</b> if improper input
-     */
-    public function setOrderId($s){
-        if (is_string($s)){
-            $this->options['SellerFulfillmentOrderId'] = $s;
-        } else {
-            return false;
-        }
-    }
+  /**
+   * Sets the fulfillment order ID. (Required)
+   * 
+   * This method sets the Fulfillment Order ID to be sent in the next request.
+   * This parameter is required for fetching the fulfillment order from Amazon.
+   *
+   * @param string $id <p>Maximum 40 characters.</p>
+   */
+  public function setOrderId(string $id){
+    $this->options['SellerFulfillmentOrderId'] = $id;
+  }
     
     /**
      * Fetches data on a fulfillment order from Amazon.

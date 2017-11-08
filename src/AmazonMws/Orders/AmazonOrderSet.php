@@ -50,12 +50,12 @@ class AmazonOrderSet extends \AmazonMws\Core\AmazonOrderCore implements \Iterato
      * @param array|string $m [optional] <p>The files (or file) to use in Mock Mode.</p>
      * @param string $config [optional] <p>An alternate config file to set. Used for testing.</p>
      */
-    public function __construct($s = null, $o = null, $mock = false, $m = null, $config = null){
-        parent::__construct($s, $mock, $m, $config);
+    public function __construct(\AmazonMws\Config\AmazonStore $store, string $o = null){
+        parent::__construct($store);
         $this->i = 0;
         
-        if($o){
-            $this->setOrderIds($o);
+        if( $o!==null ){
+          $this->setOrderIds($o);
         }
         
         $this->options['Action'] = 'GetOrder';
