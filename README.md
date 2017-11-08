@@ -13,6 +13,20 @@ This is __NOT__ for Amazon Web Services (AWS) - Cloud Computing Services.
 
 ## Example Usage
 
+At your constructor set authentication data example:
+
+```php
+$amazonStore = new \AmazonMws\Config\AmazonStore();
+      $amazonStore->setAccessKeyId($amazonData['access_key_id']);
+      $amazonStore->setMarketplaceId($amazonData['marketplace_id']);
+      $amazonStore->setMerchantId($amazonData['merchant_id']);
+      $amazonStore->setSecretAccessKey($amazonData['secret_access_key']);
+      $amazonStore->setSellerDevAuthToken($amazonData['seller_dev_auth_token']);
+      $amazonStore->setServiceUrl($amazonData['service_url']);
+      $amazonStore->setIsoCode($amazonData['iso_code']);
+      $this->amazonStores[] = $amazonStore;
+```
+
 Here is an example of a function used to get all warehouse-fulfilled orders from Amazon updated in the past 24 hours:
 ```php
 public function getOrders() {
